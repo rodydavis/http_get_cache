@@ -37,7 +37,7 @@ class HttpGetCache extends BaseClient {
 
   Future<StreamedResponse> save(BaseRequest request) async {
     final reqCC = request.cacheControl;
-    final res = await inner.send(request).catchError(offlineError);
+    final res = await inner.send(request);
     final resCC = res.cacheControl;
     if (res.statusCode == 200) {
       if (reqCC.noStore || resCC.noStore || reqCC.noCache | resCC.noCache) {
@@ -73,7 +73,7 @@ class HttpGetCache extends BaseClient {
     final reqCC = request.cacheControl;
 
     if (kIsWeb || method != 'get') {
-      yield await inner.send(request).catchError(offlineError);
+      yield await inner.send(request);
       return;
     }
 
@@ -106,9 +106,7 @@ class HttpGetCache extends BaseClient {
 
         if (!cachedCC.immutable && needsUpdate) {
           // Check for new eTag, Last-Modified change
-          final headRes = await inner
-              .head(request.url)
-              .catchError((err) => Response('Network Offline', 503));
+          final headRes = await inner.head(request.url);
           final headHeaders = headRes.requestHeaders;
           if (headRes.statusCode == 200) {
             // Check eTag
