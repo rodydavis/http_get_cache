@@ -9,6 +9,7 @@ environment:
 dependencies:
   cachecontrol: ^0.0.1
   collection: ^1.18.0
+  crypto: ^3.0.3
   drift: ^2.19.1+1
   drift_flutter: ^0.1.0
   fetch_client: ^1.1.2

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
@@ -143,7 +144,7 @@ class SqliteHttpCacheStore extends HttpCacheStore {
 }
 
 extension on BaseRequest {
-  String get key => Uri.encodeQueryComponent(url.key);
+  String get key => sha256.convert(utf8.encode(url.key)).toString();
 }
 
 extension on Uri {
