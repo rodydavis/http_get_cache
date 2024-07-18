@@ -55,8 +55,9 @@ class SqliteHttpCacheStore extends HttpCacheStore {
     return 0;
   }
 
-  static Future<void> deleteExpired(HttpCacheDatabase database) async {
-    await database.deleteHttpCacheStale();
+  static Future<void> deleteExpired({HttpCacheDatabase? database}) async {
+    final db = database ?? HttpCacheDatabase.instance;
+    await db.deleteHttpCacheStale();
   }
 
   Stream<List<int>> _streamAndSaveBytes(
