@@ -14,21 +14,21 @@ class HttpGetCache extends BaseClient {
 
   HttpGetCache(this.inner, this.store);
 
-  static StreamedResponse networkError(Object? error) {
+  static Future<StreamedResponse> networkError(Object? error) async {
     return StreamedResponse(
       Stream.value(utf8.encode('$error')),
       500,
     );
   }
 
-  static StreamedResponse offlineError(Object? error) {
+  static Future<StreamedResponse> offlineError(Object? error) async {
     return StreamedResponse(
       Stream.value(utf8.encode('$error')),
       503,
     );
   }
 
-  static StreamedResponse gatewayTimeout() {
+  static Future<StreamedResponse> gatewayTimeout() async {
     return StreamedResponse(
       Stream.value(utf8.encode('Gateway Timeout')),
       504,
@@ -82,7 +82,7 @@ class HttpGetCache extends BaseClient {
     bool needsUpdate = true;
 
     if (cached == null && reqCC.onlyIfCached) {
-      yield gatewayTimeout();
+      yield await gatewayTimeout();
       return;
     }
 
