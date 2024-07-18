@@ -1,0 +1,30 @@
+# This configures how `build_runner` and associated builders should behave.
+# For more information, see https://pub.dev/packages/build_config
+targets:
+  $default:
+    # Reducing sources makes the build slightly faster (some of these are required
+    # to exist in the default target).
+    sources:
+      - lib/**
+      - web/**
+      - "tool/**"
+      - pubspec.yaml
+      - lib/$lib$
+      - $package$
+    builders:
+      drift_dev:
+        # These options change how drift generates code
+        options:
+          # Drift analyzes SQL queries at compile-time. For this purpose, it needs to know which sqlite3
+          # features will be available. We depend on `sqlite3_flutter_libs`, which lets us use the latest
+          # version with fts5 enabled.
+          override_hash_and_equals_in_result_sets: true
+          apply_converters_on_variables: true
+          store_date_time_values_as_text: true
+          mutable_classes: true
+          named_parameters: true
+          sql:
+            dialect: sqlite
+            options:
+              version: "3.38"
+              modules: [fts5, json1]

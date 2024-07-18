@@ -1,0 +1,64 @@
+CREATE TABLE http_cache (
+  id INT NOT NULL PRIMARY KEY AUTOINCREMENT,
+  url TEXT NOT NULL,
+  headers TEXT NOT NULL,
+  body TEXT NOT NULL,
+  date INT NOT NULL,
+  max_age INT NOT NULL,
+  stale_while_revalidate INT NOT NULL,
+  stale_if_error INT NOT NULL,
+  immutable BOOLEAN NOT NULL,
+  UNIQUE(url)
+);
+
+CREATE UNIQUE INDEX http_cache_idx ON http_cache (
+  url,
+  date,
+  max_age,
+  stale_if_error,
+  stale_while_revalidate
+);
+
+setHttpCache:
+INSERT OR REPLACE 
+INTO http_cache (
+  url,
+  headers,
+  body,
+  date,
+  max_age,
+  stale_while_revalidate,
+  stale_if_error,
+  immutable
+)
+VALUES (
+  :url,
+  :headers,
+  :body,
+  :date,
+  :maxAge,
+  :staleWhileRevalidate,
+  :staleIfError,
+  :immutable
+)
+RETURNING *;
+
+getHttpCacheByUrl:
+SELECT * FROM http_cache
+WHERE url = :url;
+
+getHttpCache:
+SELECT * FROM http_cache 
+WHERE url = :url;
+
+deleteHttpCache:
+DELETE FROM http_cache
+WHERE url = :url;
+
+deleteHttpCacheStale:
+DELETE FROM http_cache
+WHERE unixepoch() > (date + (max_age * 1000) + (MAX(stale_while_revalidate, stale_if_error) * 1000));
+
+deleteHttpCacheStaleWithoutRevalidate:
+DELETE FROM http_cache
+WHERE unixepoch() > (date + (max_age * 1000));
