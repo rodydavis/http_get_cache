@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
 
-import 'settings.dart';
+import '../settings.dart';
 
 QueryExecutor createExecutor(DatabaseSettings settings) {
   return DatabaseConnection.delayed(Future(() async {

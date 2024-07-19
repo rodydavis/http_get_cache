@@ -4,7 +4,7 @@ import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 
-import 'settings.dart';
+import '../settings.dart';
 
 LazyDatabase createExecutor(DatabaseSettings settings) {
   return LazyDatabase(() async {

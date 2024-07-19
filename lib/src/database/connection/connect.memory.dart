@@ -1,7 +1,7 @@
 import 'package:drift/native.dart';
 
 import '../database.dart';
-import 'settings.dart';
+import '../settings.dart';
 
 HttpGetCacheDatabase createMemoryDatabase(DatabaseSettings settings) {
   final e = NativeDatabase.memory(

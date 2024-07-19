@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:path/path.dart' as p;
 import 'package:sqlite3/common.dart';
 
-import '../../constants.dart';
+import '../constants.dart';
 
 class DatabaseSettings {
   final String name;
