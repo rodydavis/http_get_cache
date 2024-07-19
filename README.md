@@ -13,8 +13,10 @@ void main() async {
 
     // Create a new HTTP Client
     final client = httpClient();
+
     // Future<StreamedResponse>
     final res = await client.send('...');
+
     // Stream<StreamedResponse>
     final res = await client.stream('...');
 }
@@ -30,7 +32,15 @@ import 'package:http_get_cache/http_get_cache_flutter.dart';
 void main() async {
     ...
     await initFlutterHttpGetCache();
-    ...
+    
+    // Create a new HTTP Client
+    final client = httpClient();
+
+    // Future<StreamedResponse>
+    final res = await client.send('...');
+    
+    // Stream<StreamedResponse>
+    final res = await client.stream('...');
 }
 ```
 
@@ -45,8 +55,7 @@ When building the Flutter app you can remove the default client with the followi
 ```dart
 import 'package:http/retry.dart';
 
-final inner = httpClient();
-final client = RetryClient(inner);
+final client = RetryClient(httpClient());
 ```
 
 ## See also
