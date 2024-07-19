@@ -1,8 +1,10 @@
+library http_get_cache_flutter;
+
 import 'package:drift/drift.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqlite3/common.dart';
 
-import 'http_get_cache_store.dart';
+import 'http_get_cache.dart';
 import 'src/constants.dart';
 
 Future<HttpGetCacheDatabase> initFlutterHttpGetCache({

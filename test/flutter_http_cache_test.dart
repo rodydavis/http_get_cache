@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:http_get_cache/http_get_cache_store.dart';
-import 'package:http_get_cache/src/http_get_cache.dart';
+import 'package:http_get_cache/http_get_cache.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 
@@ -12,7 +11,10 @@ void main() {
   late SqliteHttpCacheStore store;
 
   setUp(() async {
-    db = await initHttpGetCache(cachePath: 'temp', databasePath: 'temp');
+    db = await initHttpGetCache(
+      cachePath: 'temp',
+      databasePath: 'temp'
+    );
     store = SqliteHttpCacheStore(db);
   });
 
