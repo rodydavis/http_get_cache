@@ -1,12 +1,12 @@
 import 'package:drift/native.dart';
 
 import '../database.dart';
+import 'settings.dart';
 
-HttpCacheDatabase createMemoryDatabase({
-  bool logStatements = false,
-}) {
+HttpGetCacheDatabase createMemoryDatabase(DatabaseSettings settings) {
   final e = NativeDatabase.memory(
-    logStatements: logStatements,
+    logStatements: settings.logStatements,
+    setup: settings.setup,
   );
-  return HttpCacheDatabase(e);
+  return HttpGetCacheDatabase(settings, e);
 }

@@ -480,9 +480,10 @@ class HttpCacheCompanion extends UpdateCompanion<HttpCacheData> {
   }
 }
 
-abstract class _$HttpCacheDatabase extends GeneratedDatabase {
-  _$HttpCacheDatabase(QueryExecutor e) : super(e);
-  $HttpCacheDatabaseManager get managers => $HttpCacheDatabaseManager(this);
+abstract class _$HttpGetCacheDatabase extends GeneratedDatabase {
+  _$HttpGetCacheDatabase(QueryExecutor e) : super(e);
+  $HttpGetCacheDatabaseManager get managers =>
+      $HttpGetCacheDatabaseManager(this);
   late final HttpCache httpCache = HttpCache(this);
   late final Index httpCacheIdx = Index('http_cache_idx',
       'CREATE UNIQUE INDEX http_cache_idx ON http_cache (url, date, max_age, stale_if_error, stale_while_revalidate)');
@@ -589,14 +590,14 @@ typedef $HttpCacheUpdateCompanionBuilder = HttpCacheCompanion Function({
 });
 
 class $HttpCacheTableManager extends RootTableManager<
-    _$HttpCacheDatabase,
+    _$HttpGetCacheDatabase,
     HttpCache,
     HttpCacheData,
     $HttpCacheFilterComposer,
     $HttpCacheOrderingComposer,
     $HttpCacheCreateCompanionBuilder,
     $HttpCacheUpdateCompanionBuilder> {
-  $HttpCacheTableManager(_$HttpCacheDatabase db, HttpCache table)
+  $HttpCacheTableManager(_$HttpGetCacheDatabase db, HttpCache table)
       : super(TableManagerState(
           db: db,
           table: table,
@@ -651,7 +652,7 @@ class $HttpCacheTableManager extends RootTableManager<
 }
 
 class $HttpCacheFilterComposer
-    extends FilterComposer<_$HttpCacheDatabase, HttpCache> {
+    extends FilterComposer<_$HttpGetCacheDatabase, HttpCache> {
   $HttpCacheFilterComposer(super.$state);
   ColumnFilters<int> get id => $state.composableBuilder(
       column: $state.table.id,
@@ -700,7 +701,7 @@ class $HttpCacheFilterComposer
 }
 
 class $HttpCacheOrderingComposer
-    extends OrderingComposer<_$HttpCacheDatabase, HttpCache> {
+    extends OrderingComposer<_$HttpGetCacheDatabase, HttpCache> {
   $HttpCacheOrderingComposer(super.$state);
   ColumnOrderings<int> get id => $state.composableBuilder(
       column: $state.table.id,
@@ -748,9 +749,9 @@ class $HttpCacheOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
-class $HttpCacheDatabaseManager {
-  final _$HttpCacheDatabase _db;
-  $HttpCacheDatabaseManager(this._db);
+class $HttpGetCacheDatabaseManager {
+  final _$HttpGetCacheDatabase _db;
+  $HttpGetCacheDatabaseManager(this._db);
   $HttpCacheTableManager get httpCache =>
       $HttpCacheTableManager(_db, _db.httpCache);
 }

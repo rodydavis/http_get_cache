@@ -1,4 +1,4 @@
-import 'package:flutter_http_cache/src/date_parser.dart';
+import 'package:http_get_cache/src/date_parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

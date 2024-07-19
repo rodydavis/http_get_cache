@@ -1,25 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_http_cache/src/database/connection/connect.memory.dart';
-import 'package:flutter_http_cache/src/database/database.dart';
-import 'package:flutter_http_cache/src/http_get_cache.dart';
-import 'package:flutter_http_cache/src/store/base.dart';
-import 'package:flutter_http_cache/src/store/sqlite.dart';
+import 'package:http_get_cache/http_get_cache_store.dart';
+import 'package:http_get_cache/http_get_cache_store_flutter.dart';
+import 'package:http_get_cache/src/http_get_cache.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 
-// TODO: skip cache
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  late HttpCacheDatabase db;
-  SqliteHttpCacheStore.cacheDirPath = 'temp';
-  late HttpCacheStore store;
+  late HttpGetCacheDatabase db;
+  late SqliteHttpCacheStore store;
 
   setUp(() async {
-    db = createMemoryDatabase();
+    db = await initFlutterHttpGetCache(cachePath: 'temp', databasePath: 'temp');
     store = SqliteHttpCacheStore(db);
-    HttpCacheDatabase.instance = db;
   });
 
   tearDown(() async {
@@ -27,7 +22,8 @@ void main() {
   });
 
   tearDownAll(() async {
-    await Directory(SqliteHttpCacheStore.cacheDirPath).delete(recursive: true);
+    await Directory(db.settings.cacheDir).delete(recursive: true);
+    // await Directory(db.settings.databaseDir).delete(recursive: true);
   });
 
   group('HttpGetCache', () {
@@ -48,6 +44,7 @@ void main() {
 
     test('check if cache-control header is respected', () async {
       final inner = TestHttpClient();
+      const target = 'http://example.com/cache-control';
       inner.handle = (req) async {
         return Response('', 200, headers: {
           'Cache-Control': 'public, immutable',
@@ -55,13 +52,13 @@ void main() {
       };
       final client = HttpGetCache(inner, store);
 
-      var res = await client.get(Uri.http('example.com'));
+      var res = await client.get(Uri.parse(target));
 
       expect(res.statusCode, 200);
       expect(res.headers['Cache-Control'], 'public, immutable');
       expect(inner.calls, 1);
 
-      res = await client.get(Uri.http('example.com'));
+      res = await client.get(Uri.parse(target));
 
       expect(res.statusCode, 200);
       expect(res.headers['Cache-Control'], 'public, immutable');
@@ -70,6 +67,7 @@ void main() {
 
     test('check if max-age is respected', () async {
       final inner = TestHttpClient();
+      const target = 'http://example.com/max-age';
       const ma = 5;
       inner.handle = (req) async {
         return Response.bytes(utf8.encode('Success!'), 200, headers: {
@@ -78,20 +76,20 @@ void main() {
       };
       final client = HttpGetCache(inner, store);
 
-      var res = await client.get(Uri.http('example.com'));
+      var res = await client.get(Uri.parse(target));
 
       expect(res.statusCode, 200);
       expect(res.headers['Cache-Control'], 'max-age=$ma');
       expect(inner.calls, 1);
 
-      res = await client.get(Uri.http('example.com'));
+      res = await client.get(Uri.parse(target));
 
       expect(res.statusCode, 200);
       expect(res.headers['Cache-Control'], 'max-age=$ma');
       expect(inner.calls, 1);
 
       await Future.delayed(const Duration(seconds: ma + 1));
-      res = await client.get(Uri.http('example.com'));
+      res = await client.get(Uri.parse(target));
 
       expect(res.statusCode, 200);
       expect(res.headers['Cache-Control'], 'max-age=$ma');
@@ -100,6 +98,7 @@ void main() {
 
     test('check if max-age + stale-while-revalidate is respected', () async {
       final inner = TestHttpClient();
+      const target = 'http://example.com/max-age/stale-while-revalidate';
       const ma = 3;
       const swr = 5;
       inner.handle = (req) async {
@@ -109,14 +108,14 @@ void main() {
       };
       final client = HttpGetCache(inner, store);
 
-      var res = await client.get(Uri.http('example.com'));
+      var res = await client.get(Uri.parse(target));
 
       expect(res.statusCode, 200);
       expect(res.headers['Cache-Control'],
           'max-age=$ma, stale-while-revalidate=$swr');
       expect(inner.calls, 1);
 
-      res = await client.get(Uri.http('example.com'));
+      res = await client.get(Uri.parse(target));
 
       expect(res.statusCode, 200);
       expect(res.headers['Cache-Control'],
@@ -124,7 +123,7 @@ void main() {
       expect(inner.calls, 1);
 
       await Future.delayed(const Duration(seconds: ma));
-      await client.stream(Request('GET', Uri.http('example.com'))).first;
+      await client.stream(Request('GET', Uri.parse(target))).first;
 
       expect(res.statusCode, 200);
       expect(res.headers['Cache-Control'],
@@ -132,7 +131,7 @@ void main() {
       expect(inner.calls, 1);
 
       await Future.delayed(const Duration(seconds: swr + 1));
-      await client.get(Uri.http('example.com'));
+      await client.get(Uri.parse(target));
 
       expect(res.statusCode, 200);
       expect(res.headers['Cache-Control'],
@@ -148,10 +147,9 @@ void main() {
       int count = 0;
       bool error = false;
       inner.handle = (req) async {
-        if (error) {
-          return Response('', 500);
-        }
-        return Response.bytes(utf8.encode('count: ${++count}'), 200, headers: {
+        if (error) return Response('', 500);
+        if (req.method == 'GET') count++;
+        return Response.bytes(utf8.encode('count: $count'), 200, headers: {
           'Cache-Control': 'max-age=$ma, stale-if-error=$sie',
         });
       };

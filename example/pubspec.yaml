@@ -7,7 +7,7 @@ environment:
   sdk: '>=3.4.3 <4.0.0'
 
 dependencies:
-  flutter_http_cache:
+  http_get_cache:
     path: ..
   flutter:
     sdk: flutter

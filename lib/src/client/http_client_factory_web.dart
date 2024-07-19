@@ -6,8 +6,8 @@ import '../store/base.dart';
 
 Client httpClient({
   Client? innerClient,
+  HttpCacheStore? store,
 }) {
-  final store = HttpCacheStore();
   return HttpGetCache(
     () {
       if (innerClient != null) return innerClient;
@@ -17,6 +17,6 @@ Client httpClient({
         // streamRequests: true,
       );
     }(),
-    store,
+    store ?? HttpCacheStore(),
   );
 }

@@ -1,11 +1,11 @@
-# flutter_http_cache
+# http_get_cache
 
 HTTP compliant cache for Flutter. This package is a wrapper around the `http` package that provides a simple way to cache responses using the 'Cache-Control', 'eTag' and 'Last-Modified' headers.
 
 ## Usage
 
 ```dart
-import 'package:flutter_http_cache/flutter_http_cache.dart';
+import 'package:http_get_cache/http_get_cache.dart';
 ...
 // Create a new HTTP Client
 final client = httpClient();

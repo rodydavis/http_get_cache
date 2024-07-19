@@ -6,6 +6,8 @@ import 'package:flutter/widgets.dart';
 
 import 'package:http/http.dart';
 
+import 'http_get_cache.dart';
+
 /// Fetches the given URL from the network, associating it with the given scale.
 ///
 /// The image will be cached regardless of cache headers from the server.
@@ -19,7 +21,7 @@ import 'package:http/http.dart';
 class HttpImageProvider extends ImageProvider<HttpImageProvider> {
   /// Can be set to override the default [Client] for the
   /// [HttpImageProvider].
-  static Client defaultClient = Client();
+  static Client defaultClient = httpClient();
 
   /// Creates an object that fetches the image at the given URL.
   ///

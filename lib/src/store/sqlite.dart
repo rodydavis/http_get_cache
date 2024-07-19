@@ -2,36 +2,33 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
+import '../constants.dart';
 import '../database/database.dart';
 import '../date_parser.dart';
 import '../request_headers.dart';
 import 'base.dart';
 
 class SqliteHttpCacheStore extends HttpCacheStore {
-  final HttpCacheDatabase database;
+  final HttpGetCacheDatabase database;
 
   SqliteHttpCacheStore(this.database);
 
-  static String cacheDirPath = '';
-  static Future<String> getCacheDir() async {
+  static Future<String> getCacheDir(HttpGetCacheDatabase database) async {
     if (kIsWeb) return '';
-    final cacheDir = cacheDirPath.isNotEmpty
-        ? Directory(cacheDirPath)
-        : await getApplicationCacheDirectory();
+    final cachePath = database.settings.cachePath;
+    final cacheDir = Directory(cachePath);
     if (!cacheDir.existsSync()) {
       await cacheDir.create(recursive: true);
     }
     return cacheDir.path;
   }
 
-  static Future<void> deleteCacheDir() async {
+  static Future<void> deleteCacheDir(HttpGetCacheDatabase database) async {
     if (kIsWeb) return;
-    final cachePath = await getCacheDir();
+    final cachePath = await getCacheDir(database);
     if (cachePath.isEmpty) return;
     final cacheDir = Directory(cachePath);
 
@@ -40,9 +37,9 @@ class SqliteHttpCacheStore extends HttpCacheStore {
     }
   }
 
-  static Future<int> getCacheDirSize() async {
+  static Future<int> getCacheDirSize(HttpGetCacheDatabase database) async {
     if (kIsWeb) return 0;
-    final cachePath = await getCacheDir();
+    final cachePath = await getCacheDir(database);
     if (cachePath.isEmpty) return 0;
     final cacheDir = Directory(cachePath);
 
@@ -56,9 +53,8 @@ class SqliteHttpCacheStore extends HttpCacheStore {
     return 0;
   }
 
-  static Future<void> deleteExpired({HttpCacheDatabase? database}) async {
-    final db = database ?? HttpCacheDatabase.instance;
-    await db.deleteHttpCacheStale();
+  static Future<void> deleteExpired(HttpGetCacheDatabase database) async {
+    await database.deleteHttpCacheStale();
   }
 
   Stream<List<int>> _streamAndSaveBytes(
@@ -98,10 +94,10 @@ class SqliteHttpCacheStore extends HttpCacheStore {
     if (response.cacheControl.noStore || request.cacheControl.noStore) {
       return response;
     }
-    final dirPath = await getCacheDir();
+    final dirPath = await getCacheDir(database);
     if (dirPath.isEmpty) return response;
     final dir = Directory(dirPath);
-    final file = File(p.join(dir.path, 'http-cache', request.key));
+    final file = File(p.join(dir.path, request.key));
     return StreamedResponse(
       _streamAndSaveBytes(request, response, file),
       response.statusCode,

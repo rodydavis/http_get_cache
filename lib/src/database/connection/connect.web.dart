@@ -1,21 +1,22 @@
+import 'dart:developer';
+
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
 
-import 'package:flutter/foundation.dart';
+import 'settings.dart';
 
-QueryExecutor createExecutor(
-  String name, {
-  bool logStatements = false,
-}) {
+QueryExecutor createExecutor(DatabaseSettings settings) {
   return DatabaseConnection.delayed(Future(() async {
     final db = await WasmDatabase.open(
-      databaseName: name.split('.').first,
-      sqlite3Uri: sqliteUrl(),
-      driftWorkerUri: Uri.parse('drift_worker.js'),
+      databaseName: settings.name.split('.').first,
+      sqlite3Uri: Uri.parse(settings.sqlite3Uri),
+      driftWorkerUri: Uri.parse(settings.driftWorkerUri),
+      localSetup: settings.setup,
+      initializeDatabase: settings.initializeDatabase,
     );
 
     if (db.missingFeatures.isNotEmpty) {
-      debugPrint(
+      log(
         'Using ${db.chosenImplementation} due to unsupported '
         'browser features: ${db.missingFeatures}',
       );
@@ -23,12 +24,4 @@ QueryExecutor createExecutor(
 
     return db.resolvedExecutor;
   }));
-}
-
-Uri sqliteUrl() {
-  // TODO: Server url
-  if (kDebugMode) {
-    return Uri.parse('sqlite3.debug.wasm');
-  }
-  return Uri.parse('sqlite3.wasm');
 }

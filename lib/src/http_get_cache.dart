@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
+import 'constants.dart';
 import 'request_headers.dart';
 import 'date_parser.dart';
 import 'store/base.dart';

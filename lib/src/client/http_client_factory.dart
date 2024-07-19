@@ -5,13 +5,19 @@ import 'package:http/io_client.dart';
 
 import '../database/database.dart';
 import '../http_get_cache.dart';
+import '../store/base.dart';
 import '../store/sqlite.dart';
 
 Client httpClient({
   String userAgent = 'Example',
   Client? innerClient,
+  HttpCacheStore? store,
 }) {
-  final store = SqliteHttpCacheStore(HttpCacheDatabase.instance);
+  final db = HttpGetCacheDatabase.instance;
+  assert(
+    db != null,
+    'Database not initialized "HttpGetCacheDatabase.instance = ..."',
+  );
   return HttpGetCache(
     () {
       if (innerClient != null) return innerClient;
@@ -19,6 +25,6 @@ Client httpClient({
       client.userAgent = userAgent;
       return IOClient(client);
     }(),
-    store,
+    store ?? SqliteHttpCacheStore(db!),
   );
 }
