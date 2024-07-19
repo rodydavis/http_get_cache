@@ -5,6 +5,7 @@ import '../http_get_cache.dart';
 import '../store/base.dart';
 
 Client httpClient({
+  String userAgent = 'Example',
   Client? innerClient,
   HttpCacheStore? store,
 }) {
