@@ -58,6 +58,14 @@ import 'package:http/retry.dart';
 final client = RetryClient(httpClient());
 ```
 
+## Install via git:
+
+```yaml
+http_get_cache:
+    git:
+      url: https://github.com/rodydavis/http_get_cache
+```
+
 ## See also
 
 - https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
