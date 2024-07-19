@@ -48,3 +48,14 @@ import 'package:http/retry.dart';
 final inner = httpClient();
 final client = RetryClient(inner);
 ```
+
+## See also
+
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching
+- https://www.mnot.net/cache_docs/
+- https://jakearchibald.com/2016/caching-best-practices/
+- https://csswizardry.com/2019/03/cache-control-for-civilians/
+- https://httpwg.org/specs/rfc9111.html
+- https://httpwg.org/specs/rfc5861.html
+- https://httpwg.org/specs/rfc8246.html
