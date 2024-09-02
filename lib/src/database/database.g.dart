@@ -589,68 +589,6 @@ typedef $HttpCacheUpdateCompanionBuilder = HttpCacheCompanion Function({
   Value<bool> immutable,
 });
 
-class $HttpCacheTableManager extends RootTableManager<
-    _$HttpGetCacheDatabase,
-    HttpCache,
-    HttpCacheData,
-    $HttpCacheFilterComposer,
-    $HttpCacheOrderingComposer,
-    $HttpCacheCreateCompanionBuilder,
-    $HttpCacheUpdateCompanionBuilder> {
-  $HttpCacheTableManager(_$HttpGetCacheDatabase db, HttpCache table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $HttpCacheFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $HttpCacheOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> url = const Value.absent(),
-            Value<String> headers = const Value.absent(),
-            Value<String> body = const Value.absent(),
-            Value<int> date = const Value.absent(),
-            Value<int> maxAge = const Value.absent(),
-            Value<int> staleWhileRevalidate = const Value.absent(),
-            Value<int> staleIfError = const Value.absent(),
-            Value<bool> immutable = const Value.absent(),
-          }) =>
-              HttpCacheCompanion(
-            id: id,
-            url: url,
-            headers: headers,
-            body: body,
-            date: date,
-            maxAge: maxAge,
-            staleWhileRevalidate: staleWhileRevalidate,
-            staleIfError: staleIfError,
-            immutable: immutable,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String url,
-            required String headers,
-            required String body,
-            required int date,
-            required int maxAge,
-            required int staleWhileRevalidate,
-            required int staleIfError,
-            required bool immutable,
-          }) =>
-              HttpCacheCompanion.insert(
-            id: id,
-            url: url,
-            headers: headers,
-            body: body,
-            date: date,
-            maxAge: maxAge,
-            staleWhileRevalidate: staleWhileRevalidate,
-            staleIfError: staleIfError,
-            immutable: immutable,
-          ),
-        ));
-}
-
 class $HttpCacheFilterComposer
     extends FilterComposer<_$HttpGetCacheDatabase, HttpCache> {
   $HttpCacheFilterComposer(super.$state);
@@ -748,6 +686,93 @@ class $HttpCacheOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
+
+class $HttpCacheTableManager extends RootTableManager<
+    _$HttpGetCacheDatabase,
+    HttpCache,
+    HttpCacheData,
+    $HttpCacheFilterComposer,
+    $HttpCacheOrderingComposer,
+    $HttpCacheCreateCompanionBuilder,
+    $HttpCacheUpdateCompanionBuilder,
+    (
+      HttpCacheData,
+      BaseReferences<_$HttpGetCacheDatabase, HttpCache, HttpCacheData>
+    ),
+    HttpCacheData,
+    PrefetchHooks Function()> {
+  $HttpCacheTableManager(_$HttpGetCacheDatabase db, HttpCache table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $HttpCacheFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $HttpCacheOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> url = const Value.absent(),
+            Value<String> headers = const Value.absent(),
+            Value<String> body = const Value.absent(),
+            Value<int> date = const Value.absent(),
+            Value<int> maxAge = const Value.absent(),
+            Value<int> staleWhileRevalidate = const Value.absent(),
+            Value<int> staleIfError = const Value.absent(),
+            Value<bool> immutable = const Value.absent(),
+          }) =>
+              HttpCacheCompanion(
+            id: id,
+            url: url,
+            headers: headers,
+            body: body,
+            date: date,
+            maxAge: maxAge,
+            staleWhileRevalidate: staleWhileRevalidate,
+            staleIfError: staleIfError,
+            immutable: immutable,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String url,
+            required String headers,
+            required String body,
+            required int date,
+            required int maxAge,
+            required int staleWhileRevalidate,
+            required int staleIfError,
+            required bool immutable,
+          }) =>
+              HttpCacheCompanion.insert(
+            id: id,
+            url: url,
+            headers: headers,
+            body: body,
+            date: date,
+            maxAge: maxAge,
+            staleWhileRevalidate: staleWhileRevalidate,
+            staleIfError: staleIfError,
+            immutable: immutable,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $HttpCacheProcessedTableManager = ProcessedTableManager<
+    _$HttpGetCacheDatabase,
+    HttpCache,
+    HttpCacheData,
+    $HttpCacheFilterComposer,
+    $HttpCacheOrderingComposer,
+    $HttpCacheCreateCompanionBuilder,
+    $HttpCacheUpdateCompanionBuilder,
+    (
+      HttpCacheData,
+      BaseReferences<_$HttpGetCacheDatabase, HttpCache, HttpCacheData>
+    ),
+    HttpCacheData,
+    PrefetchHooks Function()>;
 
 class $HttpGetCacheDatabaseManager {
   final _$HttpGetCacheDatabase _db;
