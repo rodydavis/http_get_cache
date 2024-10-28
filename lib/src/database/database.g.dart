@@ -590,101 +590,117 @@ typedef $HttpCacheUpdateCompanionBuilder = HttpCacheCompanion Function({
 });
 
 class $HttpCacheFilterComposer
-    extends FilterComposer<_$HttpGetCacheDatabase, HttpCache> {
-  $HttpCacheFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$HttpGetCacheDatabase, HttpCache> {
+  $HttpCacheFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get url => $state.composableBuilder(
-      column: $state.table.url,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get headers => $state.composableBuilder(
-      column: $state.table.headers,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get headers => $composableBuilder(
+      column: $table.headers, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get body => $state.composableBuilder(
-      column: $state.table.body,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get body => $composableBuilder(
+      column: $table.body, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get date => $state.composableBuilder(
-      column: $state.table.date,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get maxAge => $state.composableBuilder(
-      column: $state.table.maxAge,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get maxAge => $composableBuilder(
+      column: $table.maxAge, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get staleWhileRevalidate => $state.composableBuilder(
-      column: $state.table.staleWhileRevalidate,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get staleWhileRevalidate => $composableBuilder(
+      column: $table.staleWhileRevalidate,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get staleIfError => $state.composableBuilder(
-      column: $state.table.staleIfError,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get staleIfError => $composableBuilder(
+      column: $table.staleIfError, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get immutable => $state.composableBuilder(
-      column: $state.table.immutable,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get immutable => $composableBuilder(
+      column: $table.immutable, builder: (column) => ColumnFilters(column));
 }
 
 class $HttpCacheOrderingComposer
-    extends OrderingComposer<_$HttpGetCacheDatabase, HttpCache> {
-  $HttpCacheOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$HttpGetCacheDatabase, HttpCache> {
+  $HttpCacheOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get url => $state.composableBuilder(
-      column: $state.table.url,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get headers => $state.composableBuilder(
-      column: $state.table.headers,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get headers => $composableBuilder(
+      column: $table.headers, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get body => $state.composableBuilder(
-      column: $state.table.body,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get body => $composableBuilder(
+      column: $table.body, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get date => $state.composableBuilder(
-      column: $state.table.date,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get maxAge => $state.composableBuilder(
-      column: $state.table.maxAge,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get maxAge => $composableBuilder(
+      column: $table.maxAge, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get staleWhileRevalidate => $state.composableBuilder(
-      column: $state.table.staleWhileRevalidate,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get staleWhileRevalidate => $composableBuilder(
+      column: $table.staleWhileRevalidate,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get staleIfError => $state.composableBuilder(
-      column: $state.table.staleIfError,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get staleIfError => $composableBuilder(
+      column: $table.staleIfError,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get immutable => $state.composableBuilder(
-      column: $state.table.immutable,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get immutable => $composableBuilder(
+      column: $table.immutable, builder: (column) => ColumnOrderings(column));
+}
+
+class $HttpCacheAnnotationComposer
+    extends Composer<_$HttpGetCacheDatabase, HttpCache> {
+  $HttpCacheAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get url =>
+      $composableBuilder(column: $table.url, builder: (column) => column);
+
+  GeneratedColumn<String> get headers =>
+      $composableBuilder(column: $table.headers, builder: (column) => column);
+
+  GeneratedColumn<String> get body =>
+      $composableBuilder(column: $table.body, builder: (column) => column);
+
+  GeneratedColumn<int> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<int> get maxAge =>
+      $composableBuilder(column: $table.maxAge, builder: (column) => column);
+
+  GeneratedColumn<int> get staleWhileRevalidate => $composableBuilder(
+      column: $table.staleWhileRevalidate, builder: (column) => column);
+
+  GeneratedColumn<int> get staleIfError => $composableBuilder(
+      column: $table.staleIfError, builder: (column) => column);
+
+  GeneratedColumn<bool> get immutable =>
+      $composableBuilder(column: $table.immutable, builder: (column) => column);
 }
 
 class $HttpCacheTableManager extends RootTableManager<
@@ -693,6 +709,7 @@ class $HttpCacheTableManager extends RootTableManager<
     HttpCacheData,
     $HttpCacheFilterComposer,
     $HttpCacheOrderingComposer,
+    $HttpCacheAnnotationComposer,
     $HttpCacheCreateCompanionBuilder,
     $HttpCacheUpdateCompanionBuilder,
     (
@@ -705,9 +722,12 @@ class $HttpCacheTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $HttpCacheFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $HttpCacheOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $HttpCacheFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $HttpCacheOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $HttpCacheAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> url = const Value.absent(),
@@ -765,6 +785,7 @@ typedef $HttpCacheProcessedTableManager = ProcessedTableManager<
     HttpCacheData,
     $HttpCacheFilterComposer,
     $HttpCacheOrderingComposer,
+    $HttpCacheAnnotationComposer,
     $HttpCacheCreateCompanionBuilder,
     $HttpCacheUpdateCompanionBuilder,
     (
