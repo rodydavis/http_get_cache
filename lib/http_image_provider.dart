@@ -23,21 +23,35 @@ class HttpImageProvider extends ImageProvider<HttpImageProvider> {
   /// [HttpImageProvider].
   static Client defaultClient = httpClient();
 
+  final Future<Uint8List?> Function(Request request)? readFromCache;
+  final Future<void> Function(Request request, Uint8List bytes)? writeToCache;
+
   /// Creates an object that fetches the image at the given URL.
   ///
   /// The arguments [url] and [scale] must not be null.
   /// [client] will be the default [Client] if not set.
-  HttpImageProvider.string(String url,
-      {this.scale = 1.0, this.headers, Client? client})
-      : client = client ?? defaultClient,
+  HttpImageProvider.string(
+    String url, {
+    this.scale = 1.0,
+    this.headers,
+    Client? client,
+    this.readFromCache,
+    this.writeToCache,
+  })  : client = client ?? defaultClient,
         url = Uri.parse(url);
 
   /// Creates an object that fetches the image at the given URL.
   ///
   /// The arguments [url] and [scale] must not be null.
   /// [client] will be the default [Client] if not set.
-  HttpImageProvider(this.url, {this.scale = 1.0, this.headers, Client? client})
-      : client = client ?? defaultClient;
+  HttpImageProvider(
+    this.url, {
+    this.scale = 1.0,
+    this.headers,
+    Client? client,
+    this.readFromCache,
+    this.writeToCache,
+  }) : client = client ?? defaultClient;
 
   /// The URL from which the image will be fetched.
   final Uri url;
@@ -97,6 +111,16 @@ class HttpImageProvider extends ImageProvider<HttpImageProvider> {
       final list = <int>[];
       final req = Request('GET', url);
       if (headers != null) req.headers.addAll(headers!);
+
+      // Check cache
+      if (readFromCache != null) {
+        final bytes = await readFromCache!(req);
+        if (bytes != null) {
+          final buffer = await ui.ImmutableBuffer.fromUint8List(bytes);
+          return decode(buffer);
+        }
+      }
+
       final res = await client.send(req);
       totalBytes = res.contentLength;
       if (res.statusCode != 200) {
@@ -123,6 +147,12 @@ class HttpImageProvider extends ImageProvider<HttpImageProvider> {
           statusCode: res.statusCode,
         );
       }
+
+      // Write to cache
+      if (writeToCache != null) {
+        await writeToCache!(req, bytes);
+      }
+
       final buffer = await ui.ImmutableBuffer.fromUint8List(bytes);
       return decode(buffer);
     } catch (e) {
