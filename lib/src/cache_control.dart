@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 
+// Clear-Site-Data: cache can be used to clear every stored response for a site in the browser cache, so use this with care. Note that this will not affected shared or intermediate caches.
 class CacheControl {
   final String value;
   CacheControl(this.value);
