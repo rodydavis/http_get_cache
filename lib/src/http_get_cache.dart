@@ -40,7 +40,7 @@ class HttpGetCache extends BaseClient {
     final res = await inner.send(request);
     final resCC = res.cacheControl;
     if (res.statusCode == 200) {
-      if (reqCC.noStore || resCC.noStore || reqCC.noCache | resCC.noCache) {
+      if (reqCC.noStore || resCC.noStore || resCC.noCache) {
         return res;
       } else {
         return await store.set(request, res);
