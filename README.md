@@ -2,6 +2,9 @@
 
 HTTP compliant cache for Flutter. This package is a wrapper around the `http` package that provides a simple way to cache responses using the 'Cache-Control', 'eTag' and 'Last-Modified' headers.
 
+> [!WARNING]
+> This project has moved here: https://github.com/rodydavis/packages.dart
+
 ## Dart
 
 ```dart
